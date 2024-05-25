@@ -170,5 +170,13 @@ if (value == "integer" & number %% 3 == 0) {
     XXXX
 
     ```{r}
-    # You may feel more comfortable figuring this out in Python first, then translating into R later.
+      mariostairs <- function(stair_height) {
+      stairs <- ""
+      for (i in 1:stair_height) {
+        stairs <- paste0(stairs, "X")
+        print(stairs)
+      }
+    }
+
+    mariostairs(4)
     ````
