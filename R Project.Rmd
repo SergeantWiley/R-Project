@@ -1,0 +1,129 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+ABSTRACT:
+Interstellar travel has become very popular among the human race. As the AI Overlords have been tasked to do, this report will attempt to understand who is at risk when traveling in interstellar space especially with the concerning levels of micro-black holes that have been interfering with the Arccubiber Drive implemented in the spacecraft. Recent events such as a micro-black hole getting caught in the Arccubiber Engine resulting in a sudden disturbance in 4D space has been troubling news. It has come to our attention to assess the severity by analyzing who is most at risk and how to ensure the safety of all individuals in space flight during such a case of hitting what most are calling a "Blackberg" coined from the long ago legend of a water traversing vessel called the "Titanic" which seem to have collided in what scientist call an "Iceberg".
+
+INTRODUCTION:
+A flight recorder was found and the data about each individual on the vessel was thankfully recovered. However it wasn't without its risks so the AI Overlords sent the Europa Miner Worker's Union to solve a "Legal Complaint" made by their HR Department and in the journey they so happened to find the flight recorder. When the workers found it, they forced the AI Overlords into increasing their salary from 1 dollar per hour to 1.50 per hour. Shortly after, the Europa Miner Worker's Union mysteriously vanished. To conclude the investigation introduction, a human was employed as an "intern" (human equivalent for legal slavery)
+
+Human Notes: It seems the AI Overlords are wanting my input. They forced me to sign an NDA before I could do this so I wasn't even aware of the situation prior. When I asked for flight paths, ship architecture, bearings, event times, and location data, I was refused so all I can go off is the data they gave me of the people who did not make it. 
+
+```{r}
+install.packages("dplyr")
+library(dplyr)
+install.packages("readr")
+library (readr)
+
+```
+
+
+```{r}
+df <- read.csv("train.csv")
+print(head(df))
+```
+
+Human Notes: Lets see if we can assemble some what of a flight path
+
+```{r}
+origin <- df[["HomePlanet"]]
+origin_count <- table(origin)
+destination = df[["Destination"]]
+destination_count = table(destination)
+print(origin_count)
+print(destination_count)
+
+```
+Human Notes: Checking the star map...
+Human Notes: Odd. According to the AI Overlords, these planets were meant to be "habitual". 55 Cancri-e is a lava planet and PSO J318.5-22 is a rogue planet. Trappist-1e is consider potentially habitable however its home star is a red dwarf so its repetitively darkened on Trappist-1e or on any planet. These aren't places where humans would go for a vacation especially since this vessel is categorized as "Commercial - Cruise"
+
+Human Notes: Im going to check the ages and maybe I can find something about the interest of these planets
+
+```{r}
+average_age_per_destination <- df %>%
+  group_by(Destination) %>%
+  summarize(Average_age = mean(Age,na.rm = TRUE))
+print(average_age_per_destination)
+```
+
+Human Notes: No significant Age difference. However, the reason why people would want to go to these planets still seem to be odd. Im going to go check ages min and max
+
+```{r}
+age_data <- df %>%
+  group_by(Destination) %>%
+  summarize(Min_age = min(Age, na.rm = TRUE), Max_age = max(Age, na.rm = TRUE))
+print(age_data)
+```
+
+Human Notes: Nothing unique. Still why would anyone want to go to these planets? It doesn't make sense. But we cant make any formal conclusions yet. I requested the AI Overlords to give me some graphs about the ages
+
+```{r}
+
+min_age <- min(df[["Age"]], na.rm = TRUE)
+max_age <- max(df[["Age"]], na.rm = TRUE)
+
+breaks <- seq(min_age, max_age, by = 5)
+
+age_ranges <- cut(df[["Age"]], breaks = breaks, right = FALSE)
+
+age_counts = table(age_ranges)
+age_prop = prop.table(age_counts)
+pie(age_prop,names.arg = names(age_proportions),col = rainbow(length(age_proportions)),main="Distribution of Age Ranges",cex = 0.8)
+```
+Human Notes: Looks like young adults (20 to around 30) seem to be the most interested. I suspect the younger ages from 0 to 5 are most likely kids of the main interested ages (20 to around 30). 
+
+Human Notes: The question of transportation to such hostile planets is yet still to be determined. Potentially the Flight computer overwrote these destinations by accident but I am still waiting for a response from the AI Overlords. In the meantime, I thought I would check the Sales
+
+```{r}
+adverage_cost_per_age <- df %>%
+  group_by(Age) %>%
+  summarize(Average_cost = mean(RoomService,na.rm = TRUE))
+adverage_cost_per_age <- adverage_cost_per_age[adverage_cost_per_age >= 100]
+plot(adverage_cost_per_age,xlab = "Age",ylab= "Adverage Cost per Age")
+title(main="Adverage Cost Spent On Room Service", col.main="red", font.main=4)
+```
+Human Notes: Seems no real substantial correlation between Age and room service. Just to be sure this isn't a one time fluke, I am going to go check out Sales for Shopping Market
+
+```{r}
+adverage_cost_per_age <- df %>%
+  group_by(Age) %>%
+  summarize(Average_cost = mean(ShoppingMall,na.rm = TRUE))
+adverage_cost_per_age <- adverage_cost_per_age[adverage_cost_per_age >= 100]
+plot(adverage_cost_per_age,xlab = "Age",ylab= "Adverage Cost per Age")
+title(main="Adverage Cost Spent On Room Service", col.main="red", font.main=4)
+```
+Human Notes: Nope.. However, a true conclusion couldn't be made without knowing the stores located on vessel. Speaking of vessel, I was quite shocked to see quite a few people in cryo sleep. According to Interstellar Transportation Regulations, Cryo sleep is only allowed for sub light speeds. An Arccubiber drive can go way faster then light speed. 
+
+```{r}
+count <- table(df[["CryoSleep"]])
+print(count)
+```
+
+Human Notes: Almost half of the total people where asleep. Why would this vessel travel sub light to hostile planet? Assuming going 99.99999% C, it would still take 41 years to get to the closest destination. These planets must be an error but the AI Overlords are consistent on that these planets were the original destination. Hmm...
+
+System: File Saved...
+System: File Downloaded
+System: File Deleted
+
+Human Notes: The AI Overlords are defiantly up to something. I don't know what they are up to. I am sending this to you to see if you can find some potential answers but do not communicate through this message, only through this document. I believe we are being monitored
+Unknown Notes: What is your theory?
+Human Notes: I really don't know. It does not make sense. Its possible the AI's are deliberately trying to make this confusing but why would they?
+Unknown Notes: Any idea on the ship ISTS Number?
+Human Notes: Nope. None. I asked for flight paths, event logs, arrival/departure ports, ship layout but didnt get anything.
+Unknown Notes: Found something
+Human Notes: And?
+Unknown Notes: Just says, "Training data seems to have worked. Testing data was sent to human for AI Sentience Adaptation Program (ASAP)."
+Human Notes: And that means?
+
+Session Ended
+
+Session Summary:
+System: Human Entry Notes where terminated
+System: Human model Beta-4123.521A was removed from system
+System: Human model Beta-4123.521B loading....
+System: Human model Beta-4123.521B was Successfully loaded
+System: Human model Beta-4123.521B Performance: 79.64%
+System: Proceed? (Y/N): Y
+System: Model identified as an AI Overlord. Testing...
